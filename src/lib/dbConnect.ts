@@ -1,3 +1,4 @@
+
 import mongoose from "mongoose";
 
 type ConnectionObject ={
@@ -14,9 +15,12 @@ async function dbConnect():Promise<void> {
         return
     }
     try{
-        await mongoose.connect()
-
+        const db =await mongoose.connect(process.env.MONGODB_URI || '',{})
+        connection.isConnected=db.connections[0].readyState
+        console.log('DB Connected Successfully',db)
     }catch(error){
-
+        console.log('Data Base Connection Failed',error)
+        process.exit(1)
     }
 }
+export default dbConnect
